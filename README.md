@@ -16,7 +16,9 @@ git clone -b starter-files --single-branch https://github.com/tru-ID/firebase-ph
 
 If you're only interested in the finished code in main then run:
 
+```bash
 git clone -b main https://github.com/tru-ID/firebase-phone-auth-sim-swap-detection-android.git
+```
 
 Create a [tru.ID Account](https://tru.id)
 
