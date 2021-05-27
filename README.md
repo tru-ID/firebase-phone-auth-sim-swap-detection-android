@@ -3,21 +3,20 @@
 ## Requirements
 
 - A [tru.ID Account](https://tru.id)
-- A [**provider** Account]("https://linktoprovider.com)
+- A [Firebase Account](https://console.firebase.google.com)
 - A mobile phone with a SIM card and mobile data connection
-- Other requirements
 
 ## Getting Started
 
 Clone the starter-files branch via:
 
 ```bash
-git clone -b starter-files --single-branch https://github.com/tru-ID/{repo-name}.git
+git clone -b starter-files --single-branch https://github.com/tru-ID/firebase-phone-auth-sim-swap-detection-android.git
 ```
 
 If you're only interested in the finished code in main then run:
 
-git clone -b main https://github.com/tru-ID/{repo-name}.git
+git clone -b main https://github.com/tru-ID/firebase-phone-auth-sim-swap-detection-android.git
 
 Create a [tru.ID Account](https://tru.id)
 
@@ -35,36 +34,32 @@ Install the **tru.ID** CLI [development server plugin](https://github.com/tru-ID
 Create a new **tru.ID** project within the root directory via:
 
 ```
-tru projects:create {project-name}
+tru projects:create firebase-android --project-dir .
 ```
 
 Run the development server, pointing it to the directly containing the newly created project configuration. This will also open up a localtunnel to your development server making it publicly accessible to the Internet so that your mobile phone can access it when only connected to mobile data.
 
 ```
-tru server -t --project-dir ./{project-name}
+tru server -t --project-dir .
 ```
 
-## Setting up React Provider
+## Setting up Firebase for Android
 
-[//]: # 'Include how to get setup with provider'
-[//]: # 'Include how to restore dependencies and run your project'
+This project uses Firebase Android. To set it up, head over to the official [documentation](https://firebase.google.com/docs/auth/android/phone-auth)
 
-To start the project, ensure you have a physical device connected (see Running React Native on a physical device guide ) then run:
+You will get a localtunnel URL in the form `https://{subdomain}.loca.lt`.
 
-```bash
-start command
-```
+Open the project up in your Android capable IDE, navigate to `app/src/main/java/com/example/firebaseandroid/api/retrofit/RetrofitService.kt` [here](https://github.com/tru-ID/firebase-phone-auth-sim-swap-detection-android/blob/main/app/src/main/java/com/example/firebaseandroid/API/retrofit/RetrofitService.kt#L17) and replace the value of `base_url` with the localtunnel URL.
 
-## Troubleshooting
-
-[//]: # 'Include troubleshooting guides, if any'
+Finally, connect your phone to your computer so it's used for running the Android project and run the application from your IDE.
 
 ## References
 
 - [**tru.ID** docs](https://developer.tru.id/docs)
+- [Firebase Phone Auth Android docs](https://firebase.google.com/docs/auth/android/phone-auth)
 
 ## Meta
 
-Distributed under the MIT License. See [LICENSE](https://github.com/tru-ID/{repo-name}/blob/main/LICENSE.md)
+Distributed under the MIT License. See [LICENSE](https://github.com/tru-ID/firebase-phone-auth-sim-swap-detection-android/blob/main/LICENSE.md)
 
 [**tru.ID**](https://tru.id)

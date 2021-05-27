@@ -10,7 +10,7 @@ import retrofit2.http.POST
 interface RetrofitService {
     @Headers("Content-Type: application/json")
     @POST("/phone-check")
-    suspend fun createPhoneCheck(@Body user: SIMCheckPost): Response<SIMCheckResult>
+    suspend fun createSIMCheck(@Body user: SIMCheckPost): Response<SIMCheckResult>
 
     companion object {
         // set up base_url in the format https://{subdomain}.loca.lt gotten from localTunnel URL
