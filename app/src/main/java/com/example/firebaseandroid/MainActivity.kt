@@ -34,8 +34,7 @@ class MainActivity : AppCompatActivity() {
             if(!isPhoneNumberFormatValid(phoneNumber)){
             renderMessage("Invalid Phone Number", "Invalid Phone Number")
             } else {
-                // disable UI
-                setUIStatus(SubmitHandler, phoneInput, false)
+               
 
              
                 // proceed with Firebase Phone Auth
@@ -129,13 +128,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private fun setUIStatus (button: Button?, input: EditText, enabled: Boolean){
-        runOnUiThread {
-            button?.isClickable = enabled
-            button?.isEnabled = enabled
-            input.isEnabled = enabled
-        }
-    }
+   
 }
 
 
