@@ -6,20 +6,12 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import com.example.firebaseandroid.API.data.SIMCheckPost
-import com.example.firebaseandroid.API.data.SIMCheckResult
-import com.example.firebaseandroid.API.retrofit.RetrofitService
 import com.example.firebaseandroid.utils.isPhoneNumberFormatValid
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
@@ -45,22 +37,7 @@ class MainActivity : AppCompatActivity() {
                 // disable UI
                 setUIStatus(SubmitHandler, phoneInput, false)
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    val response = rf().createSIMCheck(SIMCheckPost(phoneNumber))
-
-                    if(response.isSuccessful && response.body() != null){
-                        val simCheckResult = response.body() as SIMCheckResult
-
-                        // update the UI if the SIM has changed recently
-                        if(!simCheckResult.no_sim_change){
-                            renderMessage("SIM Changed Recently. Cannot Proceed 😥", "SIM-Changed")
-                            setUIStatus(SubmitHandler, phoneInput, true);
-                            return@launch
-                        }
-
-                    }
-
-                }
+             
                 // proceed with Firebase Phone Auth
                 val options = PhoneAuthOptions.newBuilder(auth!!)
                     .setPhoneNumber(phoneNumber)       // Phone number to verify
@@ -150,11 +127,7 @@ class MainActivity : AppCompatActivity() {
         alertFragment.show(supportFragmentManager, tagName)
     }
 
-    //retrofit setup
-    private fun rf(): RetrofitService {
-        return  Retrofit.Builder().baseUrl(RetrofitService.base_url).addConverterFactory(
-            GsonConverterFactory.create()).build().create(RetrofitService::class.java)
-    }
+
 
     private fun setUIStatus (button: Button?, input: EditText, enabled: Boolean){
         runOnUiThread {
