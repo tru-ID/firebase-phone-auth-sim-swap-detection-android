@@ -9,7 +9,7 @@ import retrofit2.http.POST
 
 interface RetrofitService {
     @Headers("Content-Type: application/json")
-    @POST("/phone-check")
+    @POST("/sim-check")
     suspend fun createSIMCheck(@Body user: SIMCheckPost): Response<SIMCheckResult>
 
     companion object {
