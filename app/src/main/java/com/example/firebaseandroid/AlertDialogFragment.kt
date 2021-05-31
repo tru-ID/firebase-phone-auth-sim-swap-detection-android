@@ -14,7 +14,7 @@ class AlertDialogFragment(val message: String) : DialogFragment(){
             builder.setMessage(message)
                 .setPositiveButton("Okay",
                     DialogInterface.OnClickListener { dialog, id ->
-
+                        getDialog()?.cancel()
                     })
                 .setNegativeButton(R.string.cancel,
                     DialogInterface.OnClickListener { dialog, id ->
