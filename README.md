@@ -8,16 +8,10 @@
 
 ## Getting Started
 
-Clone the starter-files branch via:
+Clone the repo:
 
 ```bash
-git clone -b starter-files --single-branch https://github.com/tru-ID/firebase-phone-auth-sim-swap-detection-android.git
-```
-
-If you're only interested in the finished code in main then run:
-
-```bash
-git clone -b main https://github.com/tru-ID/firebase-phone-auth-sim-swap-detection-android.git
+git clone https://github.com/tru-ID/firebase-phone-auth-sim-swap-detection-android.git
 ```
 
 Create a [tru.ID Account](https://tru.id)
@@ -26,7 +20,6 @@ Install the tru.ID CLI via:
 
 ```bash
 npm i -g @tru_id/cli
-
 ```
 
 Input your **tru.ID** credentials which can be found within the tru.ID [console](https://developer.tru.id/console)
@@ -45,13 +38,11 @@ Run the development server, pointing it to the directly containing the newly cre
 tru server -t --project-dir .
 ```
 
-## Setting up Firebase for Android
-
-This project uses Firebase Android. To set it up, head over to the official [documentation](https://firebase.google.com/docs/auth/android/phone-auth)
-
 You will get a localtunnel URL in the form `https://{subdomain}.loca.lt`.
 
-Open the project up in your Android capable IDE, navigate to `app/src/main/java/com/example/firebaseandroid/api/retrofit/RetrofitService.kt` [here](https://github.com/tru-ID/firebase-phone-auth-sim-swap-detection-android/blob/main/app/src/main/java/com/example/firebaseandroid/API/retrofit/RetrofitService.kt#L17) and replace the value of `base_url` with the localtunnel URL.
+Open the project up in your Android capable IDE, navigate to `app/src/main/java/com/example/firebaseandroid/api/retrofit/RetrofitService.kt` [here](main/app/src/main/java/com/example/firebaseandroid/API/retrofit/RetrofitService.kt#L17) and replace the value of `base_url` with the localtunnel URL.
+
+This project uses Firebase Phone Auth Android. To set it up, head over to the [official documentation](https://firebase.google.com/docs/auth/android/phone-auth).
 
 Finally, connect your phone to your computer so it's used for running the Android project and run the application from your IDE.
 
@@ -62,6 +53,6 @@ Finally, connect your phone to your computer so it's used for running the Androi
 
 ## Meta
 
-Distributed under the MIT License. See [LICENSE](https://github.com/tru-ID/firebase-phone-auth-sim-swap-detection-android/blob/main/LICENSE.md)
+Distributed under the MIT License. See [LICENSE](LICENSE.md)
 
 [**tru.ID**](https://tru.id)
