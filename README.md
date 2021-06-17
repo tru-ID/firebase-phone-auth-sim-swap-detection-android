@@ -53,6 +53,6 @@ Finally, connect your phone to your computer so it's used for running the Androi
 
 ## Meta
 
-Distributed under the MIT License. See [LICENSE](LICENSE.md)
+Distributed under the MIT License. See [LICENSE](LICENSE)
 
 [**tru.ID**](https://tru.id)
