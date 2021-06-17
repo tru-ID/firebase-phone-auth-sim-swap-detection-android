@@ -40,7 +40,7 @@ tru server -t --project-dir .
 
 You will get a localtunnel URL in the form `https://{subdomain}.loca.lt`.
 
-Open the project up in your Android capable IDE, navigate to `app/src/main/java/com/example/firebaseandroid/api/retrofit/RetrofitService.kt` [here](main/app/src/main/java/com/example/firebaseandroid/API/retrofit/RetrofitService.kt#L17) and replace the value of `base_url` with the localtunnel URL.
+Open the project up in your Android capable IDE, navigate to `app/src/main/java/com/example/firebaseandroid/api/retrofit/RetrofitService.kt` and replace the value of `base_url` with the localtunnel URL.
 
 This project uses Firebase Phone Auth Android. To set it up, head over to the [official documentation](https://firebase.google.com/docs/auth/android/phone-auth).
 
