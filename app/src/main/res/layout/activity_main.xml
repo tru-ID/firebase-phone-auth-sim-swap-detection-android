@@ -15,7 +15,7 @@
         android:ems="10"
         android:inputType="phone"
         android:hint="@string/placeholder"
-        android:background="#fff"
+        android:background="@drawable/shapes"
         android:textColor="#000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
