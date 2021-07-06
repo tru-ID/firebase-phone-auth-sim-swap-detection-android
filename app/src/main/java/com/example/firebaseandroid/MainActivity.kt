@@ -23,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
-    private var auth: FirebaseAuth? = null
+    private lateinit var auth: FirebaseAuth
     private var verificationId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,24 +52,24 @@ class MainActivity : AppCompatActivity() {
                         val simCheckResult = response.body() as SIMCheckResult
 
                         // update the UI if the SIM has changed recently
-                        if(!simCheckResult.no_sim_change){
+                        if(simCheckResult.no_sim_change){
                             renderMessage("SIM Changed Recently. Cannot Proceed 😥", "SIM-Changed")
                             setUIStatus(SubmitHandler, phoneInput, true);
                             return@launch
                         }
-
+                        // proceed with Firebase Phone Auth
+                        val options = PhoneAuthOptions.newBuilder(auth!!)
+                            .setPhoneNumber(phoneNumber)       // Phone number to verify
+                            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                            .setActivity(this@MainActivity)                 // Activity (for callback binding)
+                            .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
+                            .build()
+                        PhoneAuthProvider.verifyPhoneNumber(options)
+                    }
                     }
 
                 }
-                // proceed with Firebase Phone Auth
-                val options = PhoneAuthOptions.newBuilder(auth!!)
-                    .setPhoneNumber(phoneNumber)       // Phone number to verify
-                    .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                    .setActivity(this)                 // Activity (for callback binding)
-                    .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
-                    .build()
-                PhoneAuthProvider.verifyPhoneNumber(options)
-            }
+
         }
 
     }

@@ -9,12 +9,12 @@ import retrofit2.http.POST
 
 interface RetrofitService {
     @Headers("Content-Type: application/json")
-    @POST("/phone-check")
+    @POST("/sim-check")
     suspend fun createSIMCheck(@Body user: SIMCheckPost): Response<SIMCheckResult>
 
     companion object {
         // set up base_url in the format https://{subdomain}.loca.lt gotten from localTunnel URL
-        const val base_url = "https://tru-id.loca.lt"
+        const val base_url = "https://tender-bulldog-80.loca.lt"
     }
 
 }
