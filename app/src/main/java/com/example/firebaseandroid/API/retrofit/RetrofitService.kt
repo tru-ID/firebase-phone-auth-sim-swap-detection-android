@@ -14,7 +14,7 @@ interface RetrofitService {
 
     companion object {
         // set up base_url in the format https://{subdomain}.loca.lt gotten from localTunnel URL
-        const val base_url = "https://tender-bulldog-80.loca.lt"
+        const val base_url = "https://{tru.ID}.loca.lt"
     }
 
 }
