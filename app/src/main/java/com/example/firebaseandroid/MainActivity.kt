@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
-    private var auth: FirebaseAuth? = null
+     private lateinit var auth: FirebaseAuth
     private var verificationId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
