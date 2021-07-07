@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                         val simCheckResult = response.body() as SIMCheckResult
 
                         // update the UI if the SIM has changed recently
-                        if(simCheckResult.no_sim_change){
+                        if(!simCheckResult.no_sim_change){
                             renderMessage("SIM Changed Recently. Cannot Proceed 😥", "SIM-Changed")
                             setUIStatus(SubmitHandler, phoneInput, true);
                             return@launch
