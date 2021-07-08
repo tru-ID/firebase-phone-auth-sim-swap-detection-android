@@ -15,16 +15,19 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
-     private lateinit var auth: FirebaseAuth
+    private lateinit var auth: FirebaseAuth
     private var verificationId: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-          auth = FirebaseAuth.getInstance()
+        auth = FirebaseAuth.getInstance()
+
         SubmitHandler.setOnClickListener {
 
             // get phone number
             val phoneNumber = phoneInput.text.toString()
+                                .replace(Regex("\\s+"), "")
             Log.d("phone number is", phoneNumber)
 
             // close virtual keyboard
@@ -32,11 +35,10 @@ class MainActivity : AppCompatActivity() {
 
             // if it's a valid phone number begin createSIMCheck
             if(!isPhoneNumberFormatValid(phoneNumber)){
-            renderMessage("Invalid Phone Number", "Invalid Phone Number")
+                renderMessage("Invalid Phone Number", "Invalid Phone Number")
             } else {
-               
+                setUIStatus(false)
 
-             
                 // proceed with Firebase Phone Auth
                 val options = PhoneAuthOptions.newBuilder(auth!!)
                     .setPhoneNumber(phoneNumber)       // Phone number to verify
@@ -47,10 +49,10 @@ class MainActivity : AppCompatActivity() {
                 PhoneAuthProvider.verifyPhoneNumber(options)
             }
         }
-
     }
+
     //Firebase callbacks
-   private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+    private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
             // This callback will be invoked in two situations:
@@ -64,7 +66,10 @@ class MainActivity : AppCompatActivity() {
             if (code != null) {
                 verifyVerificationCode(code)
             }
+
+            // TODO: What happens if the code is null?
         }
+
         private fun verifyVerificationCode(code: String) {
             //creating the credential
             val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
@@ -72,14 +77,15 @@ class MainActivity : AppCompatActivity() {
             //signing the user in
             signInWithPhoneAuthCredential(credential)
         }
+
         private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
             auth!!.signInWithCredential(credential)
                 .addOnCompleteListener(
                     this@MainActivity,
                     OnCompleteListener<AuthResult?> { task ->
                         if (task.isSuccessful) {
-                            //verification successful we will start the profile activity
-                           renderMessage("Successfully logged in ✔", "Success")
+                            // verification successful we will start the profile activity
+                            renderMessage("Successfully logged in ✔", "Success")
                         } else {
                             renderMessage("Failed to log in.", "Failure")
                         }
@@ -121,14 +127,19 @@ class MainActivity : AppCompatActivity() {
    
     // render dialog
     private fun renderMessage(message: String, tagName: String){
+        setUIStatus(true)
+
         val alertFragment = AlertDialogFragment(message)
 
         alertFragment.show(supportFragmentManager, tagName)
     }
 
-
-
-   
+    private fun setUIStatus (enabled: Boolean){
+        runOnUiThread {
+            SubmitHandler?.isEnabled = enabled
+            phoneInput?.isEnabled = enabled
+        }
+    }
 }
 
 
