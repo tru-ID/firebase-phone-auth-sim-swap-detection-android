@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             if (!isPhoneNumberFormatValid(phoneNumber)) {
                 renderMessage("Invalid Phone Number", "Invalid Phone Number")
             } else {
-                setUIStatus(false)
+                setUIStatus(SubmitHandler, phoneInput, false)
 
                 // proceed with Firebase Phone Auth
                 val options = PhoneAuthOptions.newBuilder(auth!!)
@@ -127,18 +127,17 @@ class MainActivity : AppCompatActivity() {
     }
    
     // render dialog
-    private fun renderMessage(message: String, tagName: String){
-        setUIStatus(true)
-
+    private fun renderMessage(message: String, tagName: String) {
         val alertFragment = AlertDialogFragment(message)
 
         alertFragment.show(supportFragmentManager, tagName)
     }
 
-    private fun setUIStatus (enabled: Boolean){
+    private fun setUIStatus (button: Button?, input: EditText, enabled: Boolean) {
         runOnUiThread {
-            SubmitHandler?.isEnabled = enabled
-            phoneInput?.isEnabled = enabled
+            button?.isClickable = enabled
+            button?.isEnabled = enabled
+            input.isEnabled = enabled
         }
     }
 }
