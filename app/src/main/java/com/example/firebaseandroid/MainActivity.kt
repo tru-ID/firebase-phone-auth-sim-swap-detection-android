@@ -21,20 +21,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         auth = FirebaseAuth.getInstance()
 
         SubmitHandler.setOnClickListener {
-
             // get phone number
             val phoneNumber = phoneInput.text.toString()
-                                .replace(Regex("\\s+"), "")
+                .replace(Regex("\\s+"), "")
             Log.d("phone number is", phoneNumber)
 
             // close virtual keyboard
             phoneInput.onEditorAction(EditorInfo.IME_ACTION_DONE)
 
             // if it's a valid phone number begin createSIMCheck
-            if(!isPhoneNumberFormatValid(phoneNumber)){
+            if (!isPhoneNumberFormatValid(phoneNumber)) {
                 renderMessage("Invalid Phone Number", "Invalid Phone Number")
             } else {
                 setUIStatus(false)
@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
             //     user action.
             Log.d("MainActivity ", "onVerificationCompleted:$credential")
             val code = credential.smsCode
+
             if (code != null) {
                 verifyVerificationCode(code)
             }
