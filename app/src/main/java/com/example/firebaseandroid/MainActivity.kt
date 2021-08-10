@@ -26,14 +26,15 @@ import id.tru.sdk.TruSDK
 class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private var verificationId: String? = null
-    private val truSdk = TruSDK.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        TruSDK.initializeSdk(this.applicationContext)
-         auth = FirebaseAuth.getInstance()
-        SubmitHandler.setOnClickListener {
 
+        TruSDK.initializeSdk(this.applicationContext)
+        auth = FirebaseAuth.getInstance()
+
+        SubmitHandler.setOnClickListener {
             // get phone number
             val phoneNumber = phoneInput.text.toString()
             Log.d("phone number is", phoneNumber)
@@ -42,46 +43,47 @@ class MainActivity : AppCompatActivity() {
             phoneInput.onEditorAction(EditorInfo.IME_ACTION_DONE)
 
             // if it's a valid phone number begin createSIMCheck
-            if(!isPhoneNumberFormatValid(phoneNumber)){
-            renderMessage("Invalid Phone Number", "Invalid Phone Number")
+            if (!isPhoneNumberFormatValid(phoneNumber)) {
+                renderMessage("Invalid Phone Number", "Invalid Phone Number")
             } else {
                 // disable UI
                 setUIStatus(SubmitHandler, phoneInput, false)
                  
                 CoroutineScope(Dispatchers.IO).launch {
-
+                    val truSdk = TruSDK.getInstance()
                     val reachabilityDetails = truSdk.isReachable()
-
                     var supportsSimCheck = false
 
-                    if(reachabilityDetails.error == null && reachabilityDetails.products?.size() >= 1) {
-                    reachabilityDetails.products.forEach {
-
-                    if(it == "Sim Check") {
-                    supportsSimCheck = true 
-                    } else {
-                    supportsSimCheck = false
-                    }
-                    } 
+                    if (reachabilityDetails != null) {
+                        if (reachabilityDetails.error == null && reachabilityDetails.products?.size!! >= 1) {
+                            reachabilityDetails.products?.forEach {
+                                if (it.productId == "SCK") {
+                                    supportsSimCheck = true
+                                }
+                            }
+                        }
                     }
                     
-                    if(!supportsSimCheck) {
-                      renderMessage("Something went wrong.", "Please contact support.")
-                      setUIStatus(SubmitHandler, phoneInput, true);
-                      return@launch
+                    if (!supportsSimCheck) {
+                        renderMessage("Something went wrong.", "Please contact support.")
+                        setUIStatus(SubmitHandler, phoneInput, true)
+
+                        return@launch
                     }
 
                     val response = rf().createSIMCheck(SIMCheckPost(phoneNumber))
 
-                    if(response.isSuccessful && response.body() != null){
+                    if (response.isSuccessful && response.body() != null) {
                         val simCheckResult = response.body() as SIMCheckResult
                             
                         // update the UI if the SIM has changed recently
-                        if(!simCheckResult.no_sim_change){
+                        if (!simCheckResult.no_sim_change) {
                             renderMessage("SIM Changed Recently. Cannot Proceed 😥", "SIM-Changed")
-                            setUIStatus(SubmitHandler, phoneInput, true);
+                            setUIStatus(SubmitHandler, phoneInput, true)
+
                             return@launch
                         }
+
                         // proceed with Firebase Phone Auth
                         val options = PhoneAuthOptions.newBuilder(auth!!)
                             .setPhoneNumber(phoneNumber)       // Phone number to verify
@@ -91,13 +93,11 @@ class MainActivity : AppCompatActivity() {
                             .build()
                         PhoneAuthProvider.verifyPhoneNumber(options)
                     }
-                    }
-
                 }
-
+            }
         }
-
     }
+
     //Firebase callbacks
    private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
@@ -110,10 +110,12 @@ class MainActivity : AppCompatActivity() {
             //     user action.
             Log.d("MainActivity ", "onVerificationCompleted:$credential")
             val code = credential.smsCode
+
             if (code != null) {
                 verifyVerificationCode(code)
             }
         }
+
         private fun verifyVerificationCode(code: String) {
             //creating the credential
             val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
@@ -121,6 +123,7 @@ class MainActivity : AppCompatActivity() {
             //signing the user in
             signInWithPhoneAuthCredential(credential)
         }
+
         private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
             auth!!.signInWithCredential(credential)
                 .addOnCompleteListener(
@@ -143,10 +146,12 @@ class MainActivity : AppCompatActivity() {
             if (e is FirebaseAuthInvalidCredentialsException) {
                 // Invalid request
                 renderMessage("Invalid Request", "Invalid")
+
                 return
             } else if (e is FirebaseTooManyRequestsException) {
                 // The SMS quota for the project has been exceeded
                 renderMessage("SMS Quota exceeded", "Quota")
+
                 return
             }
 

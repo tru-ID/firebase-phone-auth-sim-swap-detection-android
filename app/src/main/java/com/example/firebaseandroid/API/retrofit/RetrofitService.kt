@@ -13,7 +13,7 @@ interface RetrofitService {
     suspend fun createSIMCheck(@Body user: SIMCheckPost): Response<SIMCheckResult>
 
     companion object {
-        // set up base_url in the format https://{subdomain}.loca.lt gotten from localTunnel URL
+        // set up base_url in the format https://{subdomain}.loca.lt retrieved from localTunnel URL
         const val base_url = "https://{tru.ID}.loca.lt"
     }
 
