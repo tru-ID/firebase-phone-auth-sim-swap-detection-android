@@ -54,9 +54,9 @@ class MainActivity : AppCompatActivity() {
                     val reachabilityDetails = truSdk.isReachable()
                     var supportsSimCheck = false
 
-                    if (reachabilityDetails != null) {
-                        if (reachabilityDetails.error == null && reachabilityDetails.products?.size!! >= 1) {
-                            reachabilityDetails.products?.forEach {
+                    reachabilityDetails?.let {
+                        if (it.error == null && it.products?.size!! >= 1) {
+                            it.products?.forEach {
                                 if (it.productId == "SCK") {
                                     supportsSimCheck = true
                                 }
