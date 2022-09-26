@@ -13,6 +13,17 @@ import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
+import id.tru.sdk.TruSDK
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.net.URL
+import com.example.firebaseandroid.API.retrofit.RetrofitService
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import com.example.firebaseandroid.API.data.SIMCheckPost
+import com.example.firebaseandroid.API.data.SIMCheckResult
 
 class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -22,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        TruSDK.initializeSdk(this.applicationContext)
         auth = FirebaseAuth.getInstance()
 
         SubmitHandler.setOnClickListener {
@@ -39,14 +51,60 @@ class MainActivity : AppCompatActivity() {
             } else {
                 setUIStatus(SubmitHandler, phoneInput, false)
 
-                // proceed with Firebase Phone Auth
-                val options = PhoneAuthOptions.newBuilder(auth!!)
-                    .setPhoneNumber(phoneNumber)       // Phone number to verify
-                    .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                    .setActivity(this)                 // Activity (for callback binding)
-                    .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
-                    .build()
-                PhoneAuthProvider.verifyPhoneNumber(options)
+                CoroutineScope(Dispatchers.IO).launch {
+                    val resp: JSONObject = TruSDK.getInstance().openWithDataCellular(URL("https://eu.api.tru.id/public/coverage/v0.1/device_ip"), false)
+                    var supportsSimCheck = false
+
+                    if (resp.optString("error") != "") {
+                        println("not reachable: ${resp.optString("error_description","No error description found")}")
+                    } else {
+                        val status = resp.optInt("http_status")
+                        if (status == 200) {
+                            val body = resp.optJSONObject("response_body")
+                            if (body != null) {
+                                val products = body.optJSONArray("products")
+
+                                if (products != null) {
+                                    (0 until products.length()).forEach {
+                                        val product = products.getJSONObject(it)
+
+                                        if (product.get("product_id") == "SCK") {
+                                            supportsSimCheck = true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!supportsSimCheck) {
+                            renderMessage("Something went wrong.", "Please contact support.")
+                            setUIStatus(SubmitHandler, phoneInput, true);
+                            return@launch
+                        }
+
+                        val response = rf().createSIMCheck(SIMCheckPost(phoneNumber))
+
+                        if (response.isSuccessful && response.body() != null) {
+                            val simCheckResult = response.body() as SIMCheckResult
+
+                            // update the UI if the SIM has changed recently
+                            if (!simCheckResult.no_sim_change) {
+                                renderMessage("SIM Changed Recently. Cannot Proceed 😥", "SIM-Changed")
+                                setUIStatus(SubmitHandler, phoneInput, true);
+                                return@launch
+                            }
+
+                            // proceed with Firebase Phone Auth
+                            val options = PhoneAuthOptions.newBuilder(auth!!)
+                                .setPhoneNumber(phoneNumber)       // Phone number to verify
+                                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                                .setActivity(this@MainActivity)                 // Activity (for callback binding)
+                                .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
+                                .build()
+                            PhoneAuthProvider.verifyPhoneNumber(options)
+                        }
+                    }
+                }
             }
         }
     }
@@ -142,5 +200,8 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-
-
+//retrofit setup
+private fun rf(): RetrofitService {
+    return  Retrofit.Builder().baseUrl(RetrofitService.base_url).addConverterFactory(
+        GsonConverterFactory.create()).build().create(RetrofitService::class.java)
+}
