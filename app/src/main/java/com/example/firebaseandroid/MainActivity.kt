@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity() {
             // The SMS verification code has been sent to the provided phone number, we
             // now need to ask the user to enter the code and then construct a credential
             // by combining the code with a verification ID.
-            Log.d("MainActivity", "onCodeSent:$verificationId")
+            Log.d("MainActivity", "onCodeSent:$verificationCode")
 
             // Save verification ID so we can it them later
             verificationId = verificationCode
