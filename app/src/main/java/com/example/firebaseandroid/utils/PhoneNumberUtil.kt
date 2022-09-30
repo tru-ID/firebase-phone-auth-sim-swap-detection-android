@@ -12,6 +12,7 @@ fun isPhoneNumberFormatValid(phoneNumber: String): Boolean {
     }
 
     val phoneNumberUtil = PhoneNumberUtil.getInstance()
+
     return try {
         phoneNumberUtil.isValidNumber(phoneNumberUtil.parse(
             phoneNumber, Phonenumber.PhoneNumber.CountryCodeSource.UNSPECIFIED.name))

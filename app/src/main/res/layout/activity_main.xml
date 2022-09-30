@@ -8,16 +8,14 @@
 
     <EditText
         android:id="@+id/phoneInput"
-        style="@style/Widget.Design.TextInputEditText"
+        style="@android:style/Widget.Material.EditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="388dp"
         android:padding="20dp"
         android:ems="10"
-        android:inputType="phone"
         android:hint="@string/placeholder"
-        android:background="@drawable/shapes"
-        android:textColor="#000"
+        android:inputType="phone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -43,16 +41,13 @@
 
     <Button
         android:id="@+id/SubmitHandler"
-        style="@style/Widget.MaterialComponents.Button"
+        style="@android:style/Widget.Material.Button.Colored"
         android:layout_width="141dp"
         android:layout_height="65dp"
         android:layout_marginBottom="296dp"
-        android:background="#1AC836"
         android:text="@string/submit_button"
         android:textAlignment="center"
-        android:textColor="#ffffff"
         android:textSize="30sp"
-        app:backgroundTint="#1AC836"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
