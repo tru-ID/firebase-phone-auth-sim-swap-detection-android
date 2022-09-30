@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 renderMessage("Invalid Phone Number", "Invalid Phone Number")
             } else {
                 setUIStatus(SubmitHandler, phoneInput, false)
-
+                 
                 CoroutineScope(Dispatchers.IO).launch {
                     val resp: JSONObject = TruSDK.getInstance().openWithDataCellular(URL("https://eu.api.tru.id/public/coverage/v0.1/device_ip"), false)
                     var supportsSimCheck = false
@@ -159,10 +159,12 @@ class MainActivity : AppCompatActivity() {
             if (e is FirebaseAuthInvalidCredentialsException) {
                 // Invalid request
                 renderMessage("Invalid Request", "Invalid")
+
                 return
             } else if (e is FirebaseTooManyRequestsException) {
                 // The SMS quota for the project has been exceeded
                 renderMessage("SMS Quota exceeded", "Quota")
+
                 return
             }
 

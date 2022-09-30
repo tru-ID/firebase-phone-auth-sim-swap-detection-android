@@ -8,16 +8,10 @@
 
 ## Getting Started
 
-Clone the starter-files branch via:
+Clone the repo:
 
 ```bash
-git clone -b starter-files --single-branch https://github.com/tru-ID/firebase-phone-auth-sim-swap-detection-android.git
-```
-
-If you're only interested in the finished code in main then run:
-
-```bash
-git clone -b main https://github.com/tru-ID/firebase-phone-auth-sim-swap-detection-android.git
+git clone https://github.com/tru-ID/firebase-phone-auth-sim-swap-detection-android.git
 ```
 
 Create a [tru.ID Account](https://tru.id)
@@ -26,7 +20,6 @@ Install the tru.ID CLI via:
 
 ```bash
 npm i -g @tru_id/cli
-
 ```
 
 Input your **tru.ID** credentials which can be found within the tru.ID [console](https://developer.tru.id/console)
@@ -62,6 +55,6 @@ Finally, connect your phone to your computer so it's used for running the Androi
 
 ## Meta
 
-Distributed under the MIT License. See [LICENSE](https://github.com/tru-ID/firebase-phone-auth-sim-swap-detection-android/blob/main/LICENSE.md)
+Distributed under the MIT License. See [LICENSE](LICENSE)
 
 [**tru.ID**](https://tru.id)

@@ -11,11 +11,11 @@ android {
         minSdkVersion 26
         targetSdkVersion 32
         versionCode 1
+        multiDexEnabled true
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-       compileOptions {
+    compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
